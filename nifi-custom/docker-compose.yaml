@@ -35,7 +35,7 @@ services:
     container_name: nifi-01
     depends_on:
       - zookeeper
-    image: 'apache/nifi:1.23.1'
+    image: 'nineking424/nifi:1.23.1'
     restart: on-failure
     ports:
       - 8091:8080
@@ -57,7 +57,7 @@ services:
     container_name: nifi-02
     depends_on:
       - zookeeper
-    image: 'apache/nifi:1.23.1'
+    image: 'nineking424/nifi:1.23.1'
     restart: on-failure
     ports:
       - 8092:8080
@@ -79,7 +79,7 @@ services:
     container_name: nifi-03
     depends_on:
       - zookeeper
-    image: 'apache/nifi:1.23.1'
+    image: 'nineking424/nifi:1.23.1'
     restart: on-failure
     ports:
       - 8093:8080
