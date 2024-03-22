@@ -1,0 +1,46 @@
+version: "3"
+services:
+  # configuration manager for NiFi
+  zookeeper:
+    hostname: zookeeper
+    container_name: zookeeper
+    image: 'bitnami/zookeeper:3.8.1'
+    restart: on-failure
+    environment:
+      ALLOW_ANONYMOUS_LOGIN: yes
+    volumes:
+      - zookeeper-data:/bitnami/zookeeper
+    networks:
+      - nifi-net
+  nifi-01:
+    hostname: nifi-01
+    container_name: nifi-01
+    depends_on:
+      - zookeeper
+    image: 'nineking424/nifi:1.23.1'
+    restart: on-failure
+    ports:
+      - 8091:8080
+    environment:
+      NIFI_WEB_HTTP_PORT: 8080
+      NIFI_CLUSTER_IS_NODE: true
+      NIFI_CLUSTER_NODE_PROTOCOL_PORT: 8082
+      NIFI_ZK_CONNECT_STRING: zookeeper:2181
+      NIFI_ELECTION_MAX_WAIT: '5 sec'
+      NIFI_SENSITIVE_PROPS_KEY: '2a3f3674acf2a21b1ade2ff95cdb650fd985e4355cc67955ad98379b7a604b7c' # generate a new key with 'openssl rand -hex 32'
+      TZ: Asia/Seoul
+    volumes:
+      - ./data:/data
+      - ./logs:/opt/nifi/nifi-current/logs
+      - ./content_repository:/opt/nifi/nifi-current/content_repository
+      - ./flowfile_repository:/opt/nifi/nifi-current/flowfile_repository
+      - ./database_repository:/opt/nifi/nifi-current/database_repository
+      - ./provenance_repository:/opt/nifi/nifi-current/provenance_repository
+    networks:
+      - nifi-net
+volumes:
+  zookeeper-data: # data volume for zookeeper
+   driver: local
+networks:
+  nifi-net:
+   driver: bridge

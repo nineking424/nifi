@@ -26,8 +26,6 @@ services:
       NIFI_REGISTRY_DB_DIR: /opt/nifi-registry/nifi-registry-current/database
       NIFI_REGISTRY_FLOW_PROVIDER: file
       NIFI_REGISTRY_FLOW_STORAGE_DIR: /opt/nifi-registry/nifi-registry-current/flow_storage
-    volumes:
-      - nifi-registry-data:/opt/nifi-registry/nifi-registry-current
     networks:
       - nifi-net
   nifi-01:
@@ -48,7 +46,6 @@ services:
       NIFI_SENSITIVE_PROPS_KEY: '12345678901234567890A'
       TZ: Asia/Seoul
     volumes:
-      - nifi-01-data:/opt/nifi/nifi-current
       - ./data-01:/data
     networks:
       - nifi-net
@@ -70,7 +67,6 @@ services:
       NIFI_SENSITIVE_PROPS_KEY: '12345678901234567890A'
       TZ: Asia/Seoul
     volumes:
-      - nifi-02-data:/opt/nifi/nifi-current
       - ./data-02:/data
     networks:
       - nifi-net
@@ -92,20 +88,11 @@ services:
       NIFI_SENSITIVE_PROPS_KEY: '12345678901234567890A'
       TZ: Asia/Seoul
     volumes:
-      - nifi-03-data:/opt/nifi/nifi-current
       - ./data-03:/data
     networks:
       - nifi-net
 volumes:
-  nifi-registry-data: # data volume for nifi-registry
-   driver: local
   zookeeper-data: # data volume for zookeeper
-   driver: local
-  nifi-01-data: # data volume for nifi-01
-   driver: local
-  nifi-02-data: # data volume for nifi-02
-   driver: local
-  nifi-03-data: # data volume for nifi-03
    driver: local
 networks:
   nifi-net:
