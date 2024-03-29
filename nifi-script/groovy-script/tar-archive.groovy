@@ -4,6 +4,13 @@
 // Author: Seoktae Jeong
 // Version: 1.0
 // Date: 2024-03-30
+// Input(Attributs) : filesToArchive, tarFilePath
+//  - filesToArchive: The paths of the files to be archived. Multiple paths are separated by commas.
+//  - tarFilePath: The path of the tar archive file to be created.
+// Process: Create a tar archive from the specified files and send the archive file to the success relationship.
+// Output(Attributs) : N/A
+// Usage: This script is used in the ExecuteScript processor to create a tar archive from the specified files and send the archive file to the success relationship.
+
 import org.apache.commons.compress.archivers.tar.TarArchiveOutputStream
 import org.apache.commons.compress.archivers.tar.TarArchiveEntry
 import org.apache.nifi.processor.io.StreamCallback
