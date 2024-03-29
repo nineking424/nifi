@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sql>
+  <query>
+select
+  empno,ENAME,JOB,MGR,HIREDATE,SAL,COMM,DEPTNO,LAST_UPDATE_TIME
+from sor.emp
+where empno = ? OR ename = ?
+  </query>
+  <schema>
+{
+  "type": "record",
+  "name": "EMP",
+  "namespace": "SOR",
+  "fields": [
+    {"name": "EMPNO","type": "int"},
+    {"name": "ENAME","type": ["null","string"],"default": null},
+    {"name": "JOB","type": ["null","string"],"default": null},
+    {"name": "MGR","type": ["null","int"],"default": null},
+    {"name": "HIREDATE","type": ["null",{"type": "long","logicalType": "timestamp-millis"}],"default": null},
+    {"name": "SAL","type": ["null","double"],"default": null},
+    {"name": "COMM","type": ["null","double"],"default": null},
+    {"name": "DEPTNO","type": ["null","int"],"default": null},
+    {"name": "LAST_UPDATE_TIME","type": ["null",{"type": "long","logicalType": "timestamp-millis"}]}
+  ]
+}
+</schema>
+  <args>
+    <arg>
+      <type>NUMERIC</type>
+      <value>1</value>
+    </arg>
+    <arg>
+      <type>VARCHAR</type>
+      <value>SCOTT</value>
+    </arg>
+  </args>
+</sql>
