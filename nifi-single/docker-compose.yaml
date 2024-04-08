@@ -34,6 +34,7 @@ services:
       NIFI_CLUSTER_IS_NODE: true
       NIFI_CLUSTER_NODE_PROTOCOL_PORT: 8082
       NIFI_ZK_CONNECT_STRING: zookeeper:2181
+      # NIFI_ZOOKEEPER_ROOT_NODE: /nifi # default value
       NIFI_ELECTION_MAX_WAIT: '5 sec'
       NIFI_SENSITIVE_PROPS_KEY: '2a3f3674acf2a21b1ade2ff95cdb650fd985e4355cc67955ad98379b7a604b7c' # generate a new key with 'openssl rand -hex 32'
       TZ: Asia/Seoul
