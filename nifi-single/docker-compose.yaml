@@ -12,6 +12,14 @@ services:
       - zookeeper-data:/bitnami/zookeeper
     networks:
       - nifi-net
+  redis:
+    hostname: redis
+    container_name: redis
+    image: 'redis:latest'
+    ports:
+      - "6379"
+    networks:
+      - nifi-net
   nifi-01:
     hostname: nifi-01
     container_name: nifi-01
