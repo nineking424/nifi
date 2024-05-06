@@ -1,43 +1,35 @@
 version: "3"
 services:
-  # configuration manager for NiFi
-  zookeeper:
-    hostname: zookeeper
-    container_name: zookeeper
-    image: 'bitnami/zookeeper:3.8.1'
-    restart: on-failure
-    environment:
-      ALLOW_ANONYMOUS_LOGIN: yes
-    volumes:
-      - zookeeper-data:/bitnami/zookeeper
-    networks:
-      - nifi-net
-  redis:
-    hostname: redis
-    container_name: redis
-    image: 'redis:latest'
-    ports:
-      - "6379"
-    networks:
-      - nifi-net
-  nifi-01:
-    hostname: nifi-01
-    container_name: nifi-01
-    depends_on:
-      - zookeeper
+  nifi-single:
+    hostname: nifi-single
+    container_name: nifi-single
     image: 'nineking424/nifi:1.23.1'
     restart: on-failure
     ports:
       - 8091:8080
     environment:
+      # General properties
+      TZ: Asia/Seoul
+      NIFI_SENSITIVE_PROPS_KEY: '2a3f3674acf2a21b1ade2ff95cdb650fd985e4355cc67955ad98379b7a604b7c' # generate a new key with 'openssl rand -hex 32'
+      # Web properties
       NIFI_WEB_HTTP_PORT: 8080
+      # Cluster properties
       NIFI_CLUSTER_IS_NODE: true
       NIFI_CLUSTER_NODE_PROTOCOL_PORT: 8082
+      NIFI_CLUSTER_ADDRESS: nifi-single
+      # Zookeeper properties
       NIFI_ZK_CONNECT_STRING: zookeeper:2181
-      # NIFI_ZOOKEEPER_ROOT_NODE: /nifi # default value
+      NIFI_ZK_ROOT_NODE: /nifi-single
+      # Election properties
       NIFI_ELECTION_MAX_WAIT: '5 sec'
-      NIFI_SENSITIVE_PROPS_KEY: '2a3f3674acf2a21b1ade2ff95cdb650fd985e4355cc67955ad98379b7a604b7c' # generate a new key with 'openssl rand -hex 32'
-      TZ: Asia/Seoul
+      # JVM properties
+      NIFI_JVM_HEAP_INIT: 512m
+      NIFI_JVM_HEAP_MAX: 8g
+      # Custom properties
+      NIFI_FLOW_CONFIGURATION_FILE: ./flow/flow.xml.gz
+      NIFI_FLOW_CONFIGURATION_JSON_FILE: ./flow/flow.json.gz
+      NIFI_FLOW_CONFIGURATION_ARCHIVE_DIR: ./flow/archive/
+      NIFI_CONTENT_REPOSITORY_ARCHIVE_MAX_USAGE_PERCENTAGE: 90%
     volumes:
       - ./data:/data
       - ./logs:/opt/nifi/nifi-current/logs
@@ -45,11 +37,9 @@ services:
       - ./flowfile_repository:/opt/nifi/nifi-current/flowfile_repository
       - ./database_repository:/opt/nifi/nifi-current/database_repository
       - ./provenance_repository:/opt/nifi/nifi-current/provenance_repository
+      - ./flow:/opt/nifi/nifi-current/flow
     networks:
       - nifi-net
-volumes:
-  zookeeper-data: # data volume for zookeeper
-   driver: local
 networks:
   nifi-net:
    driver: bridge
